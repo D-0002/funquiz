@@ -41,7 +41,7 @@ export interface LeaderboardResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api'; // Ensure this is your backend URL
+  private apiUrl = 'http://localhost:3000/api';
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
@@ -71,10 +71,6 @@ export class AuthService {
   signup(username: string, email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, { username, email, password })
       .pipe(map(response => {
-        if (response.user) {
-          sessionStorage.setItem('currentUser', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
-        }
         return response;
       }));
   }

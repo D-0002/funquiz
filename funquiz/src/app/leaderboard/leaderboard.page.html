@@ -1,30 +1,49 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/welcome"></ion-back-button>
+      <ion-back-button defaultHref="/play"></ion-back-button> <!-- Or /welcome or your main menu -->
     </ion-buttons>
     <ion-title class="title">Leaderboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="leaderboard-page">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Leaderboard</ion-title>
     </ion-toolbar>
   </ion-header>
-  
+
   <div class="leaderboard-header">
     <h2>Top Players</h2>
     <p>Global rankings</p>
   </div>
-  
-  <ion-list>
+
+  <div *ngIf="isLoading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading leaderboard...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="ion-text-center ion-padding error-message">
+    <p>{{ errorMessage }}</p>
+    <ion-button (click)="loadLeaderboard()" fill="outline">Try Again</ion-button>
+  </div>
+
+  <ion-list *ngIf="!isLoading && !errorMessage && rankings.length > 0">
+    <!-- Ensure property names match what's in your 'rankings' array after mapping -->
     <ion-item *ngFor="let player of rankings; let i = index" class="animate-item" [style.--item-index]="i+1">
       <ion-label>
-        <h2>{{ player.rank }}. {{ player.name }}</h2>
-        <p>Score: <span class="highlight">{{ player.score }}</span></p>
+        <h2>{{ player.rank }}. {{ player.username }}</h2> <!-- Use player.username -->
+        <p>Score: <span class="highlight">{{ player.total_score }}</span></p> <!-- Use player.total_score -->
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <div *ngIf="!isLoading && !errorMessage && rankings.length === 0" class="ion-text-center ion-padding">
+    <p>No players on the leaderboard yet, or unable to fetch data.</p>
+  </div>
 </ion-content>

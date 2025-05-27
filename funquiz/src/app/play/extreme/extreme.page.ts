@@ -6,9 +6,14 @@ import {
   IonButton, IonBackButton, IonModal, IonList, IonItem, IonLabel
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 interface Question { word: string; definition: string; }
-const QUESTIONS_PER_GAME = 5; // Number of questions per game session
+const QUESTIONS_PER_GAME = 5;
+
+const EXTREME_BASE_POINTS_PER_QUESTION = 20;
+const EXTREME_PENALTY_PER_WRONG_ATTEMPT = 5;
+const EXTREME_MIN_POINTS_IF_CORRECT = 4;     // Minimum points for a correct answer
 
 @Component({
   selector: 'app-extreme',
@@ -22,7 +27,6 @@ const QUESTIONS_PER_GAME = 5; // Number of questions per game session
   ]
 })
 export class ExtremePage implements OnInit {
-  // Full pool of questions for Extreme level
   questions: Question[] = [
     { word: 'SHAPEPOEM', definition: 'A poem written in the shape of the subject.' },
     { word: 'EPIC', definition: 'A long narrative poem about heroic deeds.' },
@@ -36,7 +40,7 @@ export class ExtremePage implements OnInit {
     { word: 'HAIKU', definition: 'A Japanese poem of seventeen syllables, in three phrases of five, seven, and five.' }
   ];
 
-  activeGameQuestions: Question[] = []; // Questions for the current game
+  activeGameQuestions: Question[] = [];
   currentQuestionIndex: number = 0;
   currentQuestion!: Question;
   userAnswer: string[] = [];
@@ -46,9 +50,11 @@ export class ExtremePage implements OnInit {
   feedbackIsError: boolean = false;
   score: number = 0;
   showResults: boolean = false;
-  hasNextLevel: boolean = false; // Extreme is the last level
+  hasNextLevel: boolean = false; 
 
-  constructor(private router: Router) {}
+  currentQuestionAttempts: number = 0; 
+
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
     this.prepareNewGameSet();
@@ -57,17 +63,15 @@ export class ExtremePage implements OnInit {
 
   prepareNewGameSet() {
     const shuffledPool = [...this.questions].sort(() => 0.5 - Math.random());
-    // Select a subset of questions for the game
     this.activeGameQuestions = shuffledPool.slice(0, Math.min(QUESTIONS_PER_GAME, shuffledPool.length));
-    this.currentQuestionIndex = 0; // Reset index for the new set
+    this.currentQuestionIndex = 0;
   }
 
   initializeGame() {
     if (this.activeGameQuestions.length === 0 || this.currentQuestionIndex >= this.activeGameQuestions.length) {
-        this.prepareNewGameSet(); // Prepare a new set if current one is exhausted or empty
+        this.prepareNewGameSet();
         if (this.activeGameQuestions.length === 0) {
           console.error("Failed to initialize game: No questions available for Extreme level.");
-          // Optionally, navigate away or show an error message to the user
           return;
         }
     }
@@ -77,6 +81,7 @@ export class ExtremePage implements OnInit {
     this.usedLetters = new Set<string>();
     this.feedback = '';
     this.feedbackIsError = false;
+    this.currentQuestionAttempts = 0;
   }
 
   shuffleLetters() {
@@ -84,32 +89,29 @@ export class ExtremePage implements OnInit {
     const requiredLetters = new Set<string>(wordLetters);
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const allKeyboardLetters = new Set<string>(requiredLetters);
-    const desiredKeyboardSize = 24; // Even more letters for Extreme difficulty
+    const desiredKeyboardSize = 24;
 
     while (allKeyboardLetters.size < desiredKeyboardSize && allKeyboardLetters.size < alphabet.length) {
       const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-      if (!allKeyboardLetters.has(randomLetter)) { // Ensure unique decoy letters if possible
+      if (!allKeyboardLetters.has(randomLetter)) {
          allKeyboardLetters.add(randomLetter);
       }
     }
-    
     this.availableLetters = Array.from(allKeyboardLetters).sort(() => 0.5 - Math.random());
   }
 
-  resetQuestion() {
+  resetAttemptUI() {
     this.userAnswer = Array(this.currentQuestion.word.length).fill('');
     this.usedLetters = new Set<string>();
-    // Feedback reset before next attempt/question
   }
 
   selectLetter(letter: string) {
-    // Logic for selecting a letter and adding to userAnswer
     const firstEmptyIndex = this.userAnswer.indexOf('');
     if (firstEmptyIndex !== -1) {
       this.userAnswer[firstEmptyIndex] = letter;
       this.usedLetters.add(letter);
     }
-    this.feedback = ''; // Clear feedback on new letter selection
+    this.feedback = '';
     this.feedbackIsError = false;
   }
 
@@ -135,19 +137,21 @@ export class ExtremePage implements OnInit {
   submit() {
     if (!this.canSubmit()) return;
     const submittedAnswer = this.userAnswer.join('');
-    
+
     if (submittedAnswer === this.currentQuestion.word) {
-      this.feedback = 'Correct!';
+      let pointsEarned = EXTREME_BASE_POINTS_PER_QUESTION - (this.currentQuestionAttempts * EXTREME_PENALTY_PER_WRONG_ATTEMPT);
+      pointsEarned = Math.max(pointsEarned, EXTREME_MIN_POINTS_IF_CORRECT);
+
+      this.score += pointsEarned;
+      this.feedback = `Correct! +${pointsEarned} points.`;
       this.feedbackIsError = false;
-      this.score++;
-      setTimeout(() => this.nextQuestion(), 1500);
+      setTimeout(() => this.nextQuestion(), 2000);
     } else {
-      this.feedback = 'Try again!';
+      this.currentQuestionAttempts++;
+      this.feedback = `Incorrect. Try again!`; 
       this.feedbackIsError = true;
-       setTimeout(() => {
-        this.userAnswer = Array(this.currentQuestion.word.length).fill('');
-        this.usedLetters.clear(); // Clear all used letters on wrong answer to "refresh" keyboard state
-        this.feedback = 'Try again! Keyboard reset.'; // Update feedback
+      setTimeout(() => {
+        this.resetAttemptUI();
       }, 1500);
     }
   }
@@ -155,27 +159,38 @@ export class ExtremePage implements OnInit {
   nextQuestion() {
     this.currentQuestionIndex++;
     if (this.currentQuestionIndex < this.activeGameQuestions.length) {
-      this.initializeGame(); 
+      this.initializeGame();
     } else {
-      this.saveExtremeScore();
-      this.showResults = true; // Game over for this level
+      this.recordLevelCompletion();
+      this.showResults = true;
     }
   }
 
-  saveExtremeScore() { 
-    localStorage.setItem('extremeScore', this.score.toString()); 
-    // Potentially save a "completedAllLevels" flag or calculate total game score here
+  recordLevelCompletion() {
+    localStorage.setItem('extremeScore', this.score.toString());
+    if (this.authService.currentUserValue && this.score > 0) {
+      this.authService.updateScore(this.score).subscribe({
+        next: (response) => {
+          console.log(`Extreme level score (${this.score}) updated on backend. New total score: ${response.user.total_score}`);
+        },
+        error: (err) => {
+          console.error('Failed to update extreme level score on backend:', err.message);
+        }
+      });
+    } else if (this.score > 0) {
+      console.log('User not logged in or score is zero. Extreme level score not sent to backend.');
+    }
   }
 
   restart() {
     this.score = 0;
     this.showResults = false;
-    this.prepareNewGameSet(); // Get a new set of questions
-    this.initializeGame(); 
+    this.prepareNewGameSet();
+    this.initializeGame();
   }
 
   goBack() {
     this.showResults = false;
-    this.router.navigate(['/play']); // Navigate back to the main play/menu screen
+    this.router.navigate(['/play']);
   }
 }

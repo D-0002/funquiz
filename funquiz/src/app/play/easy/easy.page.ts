@@ -6,9 +6,15 @@ import {
   IonButton, IonBackButton, IonModal, IonList, IonItem, IonLabel
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 interface Question { word: string; definition: string; }
 const QUESTIONS_PER_GAME = 5;
+
+// Scoring constants for Easy level
+const EASY_BASE_POINTS_PER_QUESTION = 5;
+const EASY_PENALTY_PER_WRONG_ATTEMPT = 2; 
+const EASY_MIN_POINTS_IF_CORRECT = 1;    // Minimum they get if they eventually answer correctly
 
 @Component({
   selector: 'app-easy',
@@ -22,6 +28,7 @@ const QUESTIONS_PER_GAME = 5;
   ]
 })
 export class EasyPage implements OnInit {
+  // questions pool
   questions: Question[] = [
     { word: 'RHYTHM', definition: 'The beat or musical quality of a poem.' },
     { word: 'STANZA', definition: 'A group of lines in a poem.' },
@@ -45,9 +52,11 @@ export class EasyPage implements OnInit {
   feedbackIsError: boolean = false;
   score: number = 0;
   showResults: boolean = false;
-  hasNextLevel: boolean = true; // Easy always has a next level (Medium)
+  hasNextLevel: boolean = true;
 
-  constructor(private router: Router) {}
+  currentQuestionAttempts: number = 0; 
+
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
     this.prepareNewGameSet();
@@ -59,7 +68,7 @@ export class EasyPage implements OnInit {
     this.activeGameQuestions = shuffledPool.slice(0, QUESTIONS_PER_GAME);
     this.currentQuestionIndex = 0;
   }
-  
+
   initializeGame() {
     if (this.activeGameQuestions.length === 0 || this.currentQuestionIndex >= this.activeGameQuestions.length) {
         this.prepareNewGameSet();
@@ -74,6 +83,7 @@ export class EasyPage implements OnInit {
     this.usedLetters = new Set<string>();
     this.feedback = '';
     this.feedbackIsError = false;
+    this.currentQuestionAttempts = 0; 
   }
 
   shuffleLetters() {
@@ -86,15 +96,12 @@ export class EasyPage implements OnInit {
     while (allKeyboardLetters.size < desiredKeyboardSize && allKeyboardLetters.size < alphabet.length) {
       allKeyboardLetters.add(alphabet[Math.floor(Math.random() * alphabet.length)]);
     }
-    
     this.availableLetters = Array.from(allKeyboardLetters).sort(() => 0.5 - Math.random());
   }
 
-  resetQuestion() {
+  resetAttemptUI() {
     this.userAnswer = Array(this.currentQuestion.word.length).fill('');
     this.usedLetters = new Set<string>();
-    this.feedback = '';
-    this.feedbackIsError = false;
   }
 
   selectLetter(letter: string) {
@@ -111,7 +118,9 @@ export class EasyPage implements OnInit {
       if (this.userAnswer[i] !== '') {
         const letterRemoved = this.userAnswer[i];
         this.userAnswer[i] = '';
-        if (!this.userAnswer.includes(letterRemoved)) this.usedLetters.delete(letterRemoved);
+        if (!this.userAnswer.includes(letterRemoved)) {
+            this.usedLetters.delete(letterRemoved);
+        }
         break;
       }
     }
@@ -125,17 +134,23 @@ export class EasyPage implements OnInit {
 
   submit() {
     if (!this.canSubmit()) return;
+
     const submittedAnswer = this.userAnswer.join('');
-    
+
     if (submittedAnswer === this.currentQuestion.word) {
-      this.feedback = 'Correct!';
+      let pointsEarned = EASY_BASE_POINTS_PER_QUESTION - (this.currentQuestionAttempts * EASY_PENALTY_PER_WRONG_ATTEMPT);
+      pointsEarned = Math.max(pointsEarned, EASY_MIN_POINTS_IF_CORRECT);
+
+      this.score += pointsEarned;
+      this.feedback = `Correct! +${pointsEarned} points.`;
       this.feedbackIsError = false;
-      this.score++;
-      setTimeout(() => this.nextQuestion(), 1500);
+      setTimeout(() => this.nextQuestion(), 2000);
     } else {
-      this.feedback = 'Try again!';
+
+      this.currentQuestionAttempts++; 
+      this.feedback = `Incorrect. Try again!`;
       this.feedbackIsError = true;
-      setTimeout(() => this.resetQuestion(), 1500);
+      setTimeout(() => this.resetAttemptUI(), 1500); 
     }
   }
 
@@ -144,25 +159,37 @@ export class EasyPage implements OnInit {
     if (this.currentQuestionIndex < this.activeGameQuestions.length) {
       this.initializeGame(); 
     } else {
-      this.saveEasyScore();
+      this.recordLevelCompletion();
       this.showResults = true;
     }
   }
 
-  saveEasyScore() { 
-    localStorage.setItem('easyScore', this.score.toString()); 
+  recordLevelCompletion() {
+    localStorage.setItem('easyScore', this.score.toString());
+    if (this.authService.currentUserValue && this.score > 0) {
+      this.authService.updateScore(this.score).subscribe({
+        next: (response) => {
+          console.log(`Easy level score (${this.score}) updated on backend. New total score: ${response.user.total_score}`);
+        },
+        error: (err) => {
+          console.error('Failed to update easy level score on backend:', err.message);
+        }
+      });
+    } else if (this.score > 0) {
+      console.log('User not logged in or score is zero. Easy level score not sent to backend.');
+    }
   }
 
   restart() {
     this.score = 0;
     this.showResults = false;
     this.prepareNewGameSet();
-    this.initializeGame(); 
+    this.initializeGame();
   }
 
   goToNextLevel() {
     this.showResults = false;
-    this.router.navigate(['/medium']); // Navigate to Medium level
+    this.router.navigate(['/medium']);
   }
 
   goBack() {

@@ -7,14 +7,16 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonButton,
-  IonIcon,
   IonList,
   IonItem,
   IonLabel,
-  IonBackButton
+  IonBackButton,
+  IonSpinner,        
+  IonRefresher,
+  IonRefresherContent, 
+  IonButton           
 } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { AuthService, LeaderboardPlayer } from '../../services/auth.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -27,37 +29,59 @@ import { Router } from '@angular/router';
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonButton,
-    IonIcon,
     IonList,
     IonItem,
     IonLabel,
     IonBackButton,
-    
+    IonSpinner,
+    IonRefresher,
+    IonRefresherContent,
+    IonButton,
+    // IonIcon,
     CommonModule,
     FormsModule
   ]
 })
 export class LeaderboardPage implements OnInit {
-  rankings = [
-    { rank: 1, name: 'Player One', score: 0 },
-    { rank: 2, name: 'Player Two', score: 0 },
-    { rank: 3, name: 'Player Three', score: 0 },
-    { rank: 4, name: 'Player Four', score: 0 },
-    { rank: 5, name: 'Player Five', score: 0 },
-    { rank: 6, name: 'Player Six', score: 0 },
-    { rank: 7, name: 'Player Seven', score: 0 },
-    { rank: 8, name: 'Player Eight', score: 0 },
-    { rank: 9, name: 'Player Nine', score: 0 },
-    { rank: 10, name: 'Player Ten', score: 0 }
-  ];
-  
-  constructor(private router: Router) {}
-  
+  rankings: LeaderboardPlayer[] = [];
+  isLoading: boolean = false;
+  errorMessage: string | null = null;
+
+  constructor(private authService: AuthService) {} 
+
   ngOnInit() {
+    this.loadLeaderboard();
   }
-  
-  goToMainMenu() {
-    this.router.navigate(['/welcome']);
+
+  loadLeaderboard(event?: any) { 
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.rankings = []; 
+
+    this.authService.getLeaderboard().subscribe({
+      next: (data) => {
+        this.rankings = data;
+        this.isLoading = false;
+        if (event) {
+          event.target.complete();
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching leaderboard:', err);
+        this.errorMessage = 'Failed to load leaderboard. Please try again.';
+        this.isLoading = false;
+        if (event) {
+          event.target.complete();
+        }
+      }
+    });
   }
+
+  handleRefresh(event: any) {
+    this.loadLeaderboard(event);
+  }
+
+  // goToMainMenu() { // This function might not be needed if ion-back-button handles navigation
+  //   this.router.navigate(['/welcome']); // Or '/play' or your main menu page
+  // }
 }

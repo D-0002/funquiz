@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+ion-content.welcome-bg {
+  --background: none;
+  background: linear-gradient(135deg, #1d2b64, #f8cdda);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 70%);
+    animation: rotateBG 40s linear infinite;
+    z-index: 0;
+  }
+}
+
+.app-container {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 16px;
+  padding: 40px 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+  margin: auto; 
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+
+  animation: fadeInScale 0.8s ease;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+.logo-container {
+  position: relative;
+  margin-top: 10px;
+}
+
+.logo-glow {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
+  border-radius: 50%;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.logo {
+  font-size: 2.8rem;
+  font-weight: bold;
+  position: relative;
+  color: #ffffff;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  line-height: 1.2;
+  z-index: 1;
+}
+
+.quiz-text {
+  color: #ffd32a;
+}
+
+.tagline {
+  font-size: 1rem;
+  margin-top: 16px;
+  font-weight: 500;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
+  backdrop-filter: blur(5px);
+}
+
+.feature-card ion-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.feature-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #ffd32a;
+}
+
+.feature-card p {
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.button-group {
+  margin-top: 20px;
+}
+
+.game-button {
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.play-button {
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  color: white;
+  box-shadow: 0 0 10px #00c6ff, 0 0 20px #0072ff;
+}
+
+.outline-button {
+  border: 2px solid #fff;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}

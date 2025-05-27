@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/mainmenu"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title">Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding account-page">
+  <div class="profile-container">
+    <div class="profile-avatar">
+      <ion-icon name="person-circle-outline" size="large"></ion-icon>
+    </div>
+    
+    <ion-item lines="inset">
+      <ion-label position="floating">Name</ion-label>
+      <ion-input [(ngModel)]="userName" placeholder="Enter your name"></ion-input>
+    </ion-item>
+    
+    <ion-item lines="inset">
+      <ion-label>Sex</ion-label>
+      <ion-select [(ngModel)]="userSex" interface="popover">
+        <ion-select-option value="Male">Male</ion-select-option>
+        <ion-select-option value="Female">Female</ion-select-option>
+      </ion-select>
+    </ion-item>
+    
+    <ion-button expand="block" color="tertiary" class="custom-button" (click)="goToLeaderboard()">
+      View Leaderboard
+    </ion-button>
+    
+    <ion-button expand="block" color="danger" class="custom-button" (click)="logOut()">
+      Log Out
+    </ion-button>
+  </div>
+</ion-content>

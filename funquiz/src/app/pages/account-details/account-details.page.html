@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title">Log In</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="account-details-page ion-padding">
+  <div class="account-header">
+    <div class="avatar-container">
+      <ion-avatar class="account-icon">
+      <img src="../../../assets/icon-logo.jfif" alt="Logo">
+    </ion-avatar>
+      <div class="ripple-effect"></div>
+    </div>
+    <h1 class="title">Welcome Back</h1>
+    <p class="subtitle">Please sign in to continue</p>
+  </div>
+
+  <div class="account-options">
+    <ion-item class="input-field">
+      <ion-label position="floating">Username</ion-label>
+      <ion-input [(ngModel)]="username" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item class="input-field" style="margin-top: 12px;">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [(ngModel)]="password" type="password" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" class="login-button" (click)="login()" style="margin-top: 24px;">
+      Log In
+    </ion-button>
+  </div>
+</ion-content>

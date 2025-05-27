@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+.signup-page {
+  --background: none;
+  background: linear-gradient(135deg, #1d2b64, #f8cdda);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 70%);
+    animation: rotateBG 40s linear infinite;
+    z-index: 0;
+  }
+}
+
+@keyframes rotateBG {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+ion-header ion-toolbar {
+  --background: rgba(29, 43, 100, 0.8);
+  backdrop-filter: blur(8px);
+  color: #ffd32a;
+  font-family: 'Orbitron', sans-serif;
+}
+
+ion-title {
+  font-family: 'Orbitron', sans-serif;
+  color: #ffd32a;
+}
+
+ion-back-button {
+  --color: #ffd32a;
+  font-size: 24px;
+}
+
+.signup-container {
+  position: relative;
+  z-index: 1;
+  margin-top: 50px;
+}
+
+ion-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  color: #fff;
+}
+
+ion-card-title {
+  font-size: 1.4rem;
+  text-align: center;
+  color: #ffd32a;
+}
+
+ion-card-content {
+  font-size: 0.95rem;
+}
+
+ion-item {
+  --background: transparent;
+  --color: #fff;
+  --highlight-color-focused: #ffd32a;
+}
+
+ion-label {
+  color: #fff;
+}
+
+ion-input {
+  color: #fff;
+}
+
+.pulse {
+  animation: pulse 1.5s infinite;
+  background-color: #ffd32a;
+  color: #000;
+  margin-top: 16px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 211, 42, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 211, 42, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 211, 42, 0); }
+}
+
+.login-link {
+  margin-top: 20px;
+  text-align: center;
+  color: #fff;
+  
+  a {
+    color: #ffd32a;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

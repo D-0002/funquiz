@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+.how-to-play-page {
+  --background: none;
+  background: linear-gradient(135deg, #1d2b64, #f8cdda);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 70%);
+    animation: rotateBG 40s linear infinite;
+    z-index: 0;
+  }
+  
+  ion-card {
+    margin: 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  
+  ion-card-header {
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .section-icon {
+    font-size: 24px;
+    margin-right: 12px;
+    color: #ffd32a;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffd32a;
+  }
+
+  .highlight {
+    color: #ffd32a;
+    font-weight: 600;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: #fff;
+    --highlight-color-focused: #ffd32a;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    ion-icon {
+      font-size: 20px;
+      margin-right: 16px;
+      color: #ffd32a;
+    }
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
+  }
+
+  .difficulty-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    ion-chip {
+      margin: 4px;
+      --background: rgba(255, 255, 255, 0.1);
+      --color: #fff;
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+    animation-delay: calc(var(--delay, 0s));
+    opacity: 0;
+  }
+
+  .animate-item {
+    animation: slideIn 0.5s ease-in-out forwards;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation-delay: calc(0.1s * var(--item-index, 1));
+  }
+
+  .pulse-once {
+    animation: pulse 2s ease-in-out;
+  }
+}
+
+@keyframes rotateBG {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+ion-content {
+  position: relative;
+  z-index: 1;
+}
+
+ion-header ion-toolbar {
+  --background: rgba(29, 43, 100, 0.8);
+  backdrop-filter: blur(8px);
+  color: #ffd32a;
+  font-family: 'Orbitron', sans-serif;
+}

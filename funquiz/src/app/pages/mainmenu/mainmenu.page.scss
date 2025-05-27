@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+ion-content {
+  --background: linear-gradient(135deg, #1d2b64, #f8cdda);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.05), transparent 70%),
+                radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.03), transparent 70%);
+    animation: rotateBG 40s linear infinite;
+    z-index: 0;
+  }
+}
+
+ion-header ion-toolbar {
+  --background: rgba(29, 43, 100, 0.8);
+  backdrop-filter: blur(8px);
+  color: #ffd32a;
+  font-family: 'Orbitron', sans-serif;
+}
+
+ion-icon[name="arrow-back-outline"] {
+  font-size: 24px;
+  color: #ffd32a;
+}
+
+ion-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #ffd32a;
+}
+
+.menu-box {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  max-width: 350px;
+  margin: 4rem auto;
+  text-align: center;
+}
+
+.menu-btn, .game-button {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  border-radius: 12px;
+  --box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  transition: transform 0.2s ease-in-out;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.menu-btn.play {
+  --background: linear-gradient(135deg, #3498db, #2980b9);
+  --color: white;
+  box-shadow: 0 0 10px #00c6ff, 0 0 20px #0072ff;
+}
+
+@keyframes rotateBG {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

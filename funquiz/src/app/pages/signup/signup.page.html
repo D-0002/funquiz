@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title">Sign Up</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="signup-page ion-padding">
+  <div class="signup-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Create Your Account</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <form>
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <!-- Added name="username" -->
+            <ion-input [(ngModel)]="username" name="username" type="text" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Enter your email</ion-label>
+            <!-- Added name="email" -->
+            <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="floating">Create a password</ion-label>
+            <!-- Added name="password" -->
+            <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="floating">Confirm your password</ion-label>
+            <!-- Added name="confirmPassword" -->
+            <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required></ion-input>
+          </ion-item>
+          
+          <ion-button expand="block" class="pulse" (click)="signup()">Sign Up</ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+    
+    <div class="login-link">
+      <p>
+        Already have an account?
+        <a (click)="accountDetails()">Log in</a>
+      </p>
+    </div>
+  </div>
+</ion-content>

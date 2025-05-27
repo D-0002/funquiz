@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/mainmenu"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title">Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding account-page">
+  <div class="account-options">
+    
+    <ion-item>
+      <ion-label>Background Music</ion-label> 
+      <ion-toggle
+        slot="end"
+        [(ngModel)]="bgm"
+        (ionChange)="toggleSetting('bgm', bgm)">
+      </ion-toggle>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label>Sound Effects</ion-label>
+      <ion-toggle
+        slot="end"
+        [(ngModel)]="sfx"
+        (ionChange)="toggleSetting('sfx', sfx)">
+      </ion-toggle>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label>Vibration</ion-label>
+      <ion-toggle
+        slot="end"
+        [(ngModel)]="vibration"
+        (ionChange)="toggleSetting('vibration', vibration)">
+      </ion-toggle>
+    </ion-item>
+   
+  </div>
+</ion-content>

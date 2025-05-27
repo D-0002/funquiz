@@ -1,0 +1,34 @@
+<ion-content class="ion-padding welcome-bg">
+  <div class="app-container">
+    <div class="logo-container">
+      <div class="logo-glow"></div>
+      <div class="logo">🎮 FUN<br><span class="quiz-text">QUIZ</span></div>
+    </div>
+
+    <p class="tagline">🧠 Unleash Your Knowledge!</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <ion-icon name="trophy" color="warning"></ion-icon>
+        <h3>Challenge Yourself</h3>
+        <p>Take on quizzes and climb the leaderboard!</p>
+      </div>
+      <div class="feature-card">
+        <ion-icon name="star" color="success"></ion-icon>
+        <h3>Learn & Earn</h3>
+        <p>Unlock achievements and sharpen your skills.</p>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <ion-button expand="block" class="game-button play-button" (click)="startGame()">
+        <ion-icon name="play" slot="start"></ion-icon>
+        Play Now
+      </ion-button>
+      <ion-button expand="block" fill="clear" class="game-button outline-button" (click)="howToPlay()">
+        <ion-icon name="help-circle" slot="start"></ion-icon>
+        How to Play
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

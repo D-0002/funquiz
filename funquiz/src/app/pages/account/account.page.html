@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/welcome"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title">Account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="account-page">
+  <div class="account-header">
+    <div class="avatar-container">
+      <ion-avatar class="account-icon">
+      <img src="../../../assets/icon-logo.jfif" alt="Logo">
+    </ion-avatar>
+      <div class="ripple-effect"></div>
+    </div>
+    <h2>Welcome!</h2>
+    <p>Choose an option to continue</p>
+  </div>
+
+  <div class="account-options">
+    <ion-card class="option-card login-card" (click)="goToDetails()" style="cursor: pointer;">
+      <div class="card-highlight"></div>
+      <ion-card-header>
+        <div class="icon-container">
+          <ion-icon name="log-in"></ion-icon>
+        </div>
+        <ion-card-title>Log In</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Access your existing account
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="option-card signup-card" (click)="goToSignup()" style="cursor: pointer;">
+      <div class="card-highlight"></div>
+      <ion-card-header>
+        <div class="icon-container">
+          <ion-icon name="person-add"></ion-icon>
+        </div>
+        <ion-card-title>Sign Up</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Create a new account
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

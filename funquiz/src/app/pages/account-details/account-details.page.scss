@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+.account-details-page {
+  --background: none;
+  background: linear-gradient(135deg, #1d2b64, #f8cdda);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 70%);
+    animation: rotateBG 40s linear infinite;
+    z-index: 0;
+  }
+}
+
+@keyframes rotateBG {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+ion-header ion-toolbar {
+  --background: rgba(29, 43, 100, 0.8);
+  backdrop-filter: blur(8px);
+  color: #ffd32a;
+  font-family: 'Orbitron', sans-serif;
+}
+
+ion-title {
+  font-family: 'Orbitron', sans-serif;
+  color: #ffd32a;
+}
+
+ion-back-button {
+  --color: #ffd32a;
+  font-size: 24px;
+}
+
+.account-header {
+  text-align: center;
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+  color: #fff;
+
+  .title {
+    font-size: 1.8rem;
+    margin-top: 12px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+}
+
+.avatar-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.account-icon {
+  width: 100px;
+  height: 100px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.account-icon ion-icon {
+  font-size: 80px;
+  color: #ffd32a;
+}
+
+.ripple-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 2s infinite ease-out;
+}
+
+@keyframes ripple {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+}
+
+.account-options {
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.input-field {
+  --background: rgba(255, 255, 255, 0.05);
+  --color: #fff;
+  --highlight-color-focused: #ffd32a;
+  color: #fff;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(8px);
+
+  ion-label {
+    color: #ffd32a;
+    font-weight: bold;
+  }
+
+  ion-input {
+    color: #fff;
+  }
+}
+
+.login-button {
+  margin-top: 20px;
+  --background: #ffd32a;
+  --color: #000;
+  font-weight: bold;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(255, 211, 42, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Orbitron', sans-serif;
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(255, 211, 42, 0.6);
+  }
+}

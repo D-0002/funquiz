@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+.level-selection-page {
+  --background: none;
+  background: linear-gradient(135deg, #1d2b64, #f8cdda);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%), 
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 70%);
+    animation: rotateBG 40s linear infinite;
+    z-index: 0;
+  }
+}
+
+@keyframes rotateBG {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+ion-content {
+  position: relative;
+  z-index: 1;
+}
+
+.level-selection-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.level-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+}
+
+.level-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 25px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.selected {
+    border: 2px solid #ffd32a;
+    box-shadow: 0 0 15px rgba(255, 211, 42, 0.5);
+  }
+}
+
+.level-name {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #ffd32a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-progress {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #eee;
+}
+
+.lock-icon {
+  margin-left: 8px;
+  font-size: 20px;
+}
+
+ion-header ion-toolbar {
+  --background: rgba(29, 43, 100, 0.8);
+  backdrop-filter: blur(8px);
+  color: #ffd32a;
+  font-family: 'Orbitron', sans-serif;
+}

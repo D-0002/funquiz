@@ -1,0 +1,159 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account"></ion-back-button>
+    </ion-buttons>
+    <ion-title>How to Play</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="how-to-play-page">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">How to Play</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="how-to-play-container">
+    <ion-card class="fade-in" style="--delay: 0.1s">
+      <ion-card-header>
+        <div class="section-header">
+          <ion-icon name="play-circle" class="section-icon"></ion-icon>
+          <ion-card-title class="section-title">START THE GAME</ion-card-title>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="play-circle"></ion-icon>
+            <ion-label>Launch the app and choose <strong class="highlight">STUDENT</strong> or <strong class="highlight">TEACHER</strong> profile.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="log-in"></ion-icon>
+            <ion-label>Log in or sign up if you're a new user.</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="fade-in" style="--delay: 0.2s">
+      <ion-card-header>
+        <div class="section-header">
+          <ion-icon name="game-controller" class="section-icon"></ion-icon>
+          <ion-card-title class="section-title">PLAY MENU</ion-card-title>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="game-controller"></ion-icon>
+            <ion-label>Tap <strong class="highlight">"PLAY"</strong> on the main menu.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="options"></ion-icon>
+            <ion-label>Select a difficulty level:</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-label class="difficulty-chips">
+              <ion-chip color="success" class="pulse-once">
+                <ion-icon name="lock-open" slot="start"></ion-icon>
+                <ion-label>EASY</ion-label>
+              </ion-chip>
+              <ion-chip color="warning" outline>
+                <ion-icon name="lock-closed" slot="start"></ion-icon>
+                <ion-label>MEDIUM</ion-label>
+              </ion-chip>
+              <ion-chip color="danger" outline>
+                <ion-icon name="lock-closed" slot="start"></ion-icon>
+                <ion-label>HARD</ion-label>
+              </ion-chip>
+              <ion-chip color="dark" outline>
+                <ion-icon name="lock-closed" slot="start"></ion-icon>
+                <ion-label>EXTREME</ion-label>
+              </ion-chip>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="fade-in" style="--delay: 0.3s">
+      <ion-card-header>
+        <div class="section-header">
+          <ion-icon name="help-circle" class="section-icon"></ion-icon>
+          <ion-card-title class="section-title">ANSWER QUESTIONS</ion-card-title>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="help-circle"></ion-icon>
+            <ion-label>A question will be shown at the top (e.g., a definition).</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="grid"></ion-icon>
+            <ion-label>Use the letter grid to tap and form the correct word.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="text"></ion-icon>
+            <ion-label>The blanks above the grid show how many letters the answer has.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="backspace"></ion-icon>
+            <ion-label>Use the backspace button to remove letters if you make a mistake.</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="fade-in" style="--delay: 0.4s">
+      <ion-card-header>
+        <div class="section-header">
+          <ion-icon name="trophy" class="section-icon"></ion-icon>
+          <ion-card-title class="section-title">SUBMIT & PROGRESS</ion-card-title>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="send"></ion-icon>
+            <ion-label>Tap the arrow button to submit your answer.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="checkmark-circle" color="success"></ion-icon>
+            <ion-label>Correct answers let you move to the next question.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="lock-open"></ion-icon>
+            <ion-label>Each level has 5 questions. Finish them to unlock the next difficulty.</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="fade-in" style="--delay: 0.5s">
+      <ion-card-header>
+        <div class="section-header">
+          <ion-icon name="star" class="section-icon"></ion-icon>
+          <ion-card-title class="section-title">OTHER FEATURES</ion-card-title>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="person-circle"></ion-icon>
+            <ion-label>Tap <strong class="highlight">PROFILE</strong> to view your progress and details.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="settings"></ion-icon>
+            <ion-label>In <strong class="highlight">SETTINGS</strong>, toggle BGM, sound effects, and vibration on/off.</ion-label>
+          </ion-item>
+          <ion-item class="animate-item">
+            <ion-icon slot="start" name="podium"></ion-icon>
+            <ion-label>Check the <strong class="highlight">LEADERBOARD</strong> to see your ranking compared to others.</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

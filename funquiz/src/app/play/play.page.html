@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Select Level</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="level-selection-page">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Select Level</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="level-selection-container">
+    <div class="level-grid">
+      <div *ngFor="let level of levels; let i = index"
+           class="level-card"
+           [class.selected]="level.selected"
+           (click)="selectLevel(i)">
+        <div class="level-name">
+          {{ level.name }}
+          <ion-icon *ngIf="level.locked" name="lock-closed" class="lock-icon"></ion-icon>
+        </div>
+        <div *ngIf="level.progress" class="level-progress">{{ level.progress }}</div>
+      </div>
+    </div>
+  </div>
+</ion-content>

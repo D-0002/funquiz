@@ -1,0 +1,19 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Main Menu</ion-title>
+    <ion-buttons slot="end">
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" class="mainmenu-content ion-padding">
+  <div class="menu-box">
+    <ion-button expand="block" class="menu-btn play" (click)="goTo('play')">Play</ion-button>
+    <ion-button expand="block" class="menu-btn" (click)="goTo('profile')">Profile</ion-button>
+    <ion-button expand="block" class="menu-btn" (click)="goTo('leaderboard')">Leaderboard</ion-button>
+    <ion-button expand="block" class="menu-btn" (click)="goTo('settings')">Settings</ion-button>
+  </div>
+</ion-content>

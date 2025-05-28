@@ -10,19 +10,15 @@
 <ion-content [fullscreen]="true" class="ion-padding account-page">
   <div class="profile-container">
     <div class="avatar-container">
-      <!-- Avatar is clickable to change picture -->
       <ion-avatar class="account-icon" (click)="triggerFileUpload()">
         <img [src]="userProfilePictureUrl" alt="Profile Picture" />
-        <!-- Edit icon overlay -->
         <div class="edit-overlay">
-          <ion-icon name="create-outline"></ion-icon>
+          <ion-icon name="pencil-outline"></ion-icon>
         </div>
       </ion-avatar>
       
-      <!-- Ripple effect matching account page -->
       <div class="ripple-effect"></div>
 
-      <!-- Hidden file input element -->
       <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept="image/png, image/jpeg, image/gif" />
     </div>
 

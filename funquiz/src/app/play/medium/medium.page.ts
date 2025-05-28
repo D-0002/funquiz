@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -6,14 +6,14 @@ import {
   IonButton, IonBackButton, IonModal, IonList, IonItem, IonLabel
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service'; 
+import { AuthService } from '../../../services/auth.service';
 
 interface Question { word: string; definition: string; }
 const QUESTIONS_PER_GAME = 5;
 
 const MEDIUM_BASE_POINTS_PER_QUESTION = 10;
 const MEDIUM_PENALTY_PER_WRONG_ATTEMPT = 3;
-const MEDIUM_MIN_POINTS_IF_CORRECT = 2;    // Minimum points for a correct answer
+const MEDIUM_MIN_POINTS_IF_CORRECT = 2;
 
 @Component({
   selector: 'app-medium',
@@ -26,7 +26,7 @@ const MEDIUM_MIN_POINTS_IF_CORRECT = 2;    // Minimum points for a correct answe
     CommonModule, FormsModule
   ]
 })
-export class MediumPage implements OnInit {
+export class MediumPage implements OnInit, OnDestroy {
   questions: Question[] = [
     { word: 'ALLITERATION', definition: 'The repetition of initial consonant sounds in words.' },
     { word: 'PERSONIFICATION', definition: 'Giving human qualities to non-human things.' },
@@ -54,11 +54,35 @@ export class MediumPage implements OnInit {
 
   currentQuestionAttempts: number = 0;
 
+  private vibrationEnabled: boolean = true;
+  private sfxEnabled: boolean = false;
+  private clickSoundPlayer: HTMLAudioElement | null = null;
+
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
+    this.loadVibrationSetting();
+    this.loadSfxSetting();
     this.prepareNewGameSet();
     this.initializeGame();
+  }
+
+  ngOnDestroy() {
+    if (this.clickSoundPlayer) {
+      this.clickSoundPlayer.pause();
+      this.clickSoundPlayer.src = '';
+      this.clickSoundPlayer = null;
+    }
+  }
+
+  loadVibrationSetting() {
+    const vibrationSetting = localStorage.getItem('vibration');
+    this.vibrationEnabled = vibrationSetting !== null ? JSON.parse(vibrationSetting) : true;
+  }
+
+  loadSfxSetting() {
+    const sfxSetting = localStorage.getItem('sfx');
+    this.sfxEnabled = sfxSetting !== null ? JSON.parse(sfxSetting) : false;
   }
 
   prepareNewGameSet() {
@@ -108,6 +132,17 @@ export class MediumPage implements OnInit {
     if (firstEmptyIndex !== -1) {
       this.userAnswer[firstEmptyIndex] = letter;
       this.usedLetters.add(letter);
+      this.playClickSound();
+    }
+  }
+
+  playClickSound() {
+    if (this.sfxEnabled) {
+      if (!this.clickSoundPlayer) {
+        this.clickSoundPlayer = new Audio('../../../assets/click.mp3');
+      }
+      this.clickSoundPlayer.currentTime = 0;
+      this.clickSoundPlayer.play().catch(error => console.warn("Click sound play failed:", error));
     }
   }
 
@@ -144,7 +179,14 @@ export class MediumPage implements OnInit {
       this.currentQuestionAttempts++;
       this.feedback = `Incorrect. Try again!`;
       this.feedbackIsError = true;
+      this.triggerVibration();
       setTimeout(() => this.resetAttemptUI(), 1500);
+    }
+  }
+
+  triggerVibration() {
+    if (this.vibrationEnabled && navigator.vibrate) {
+      navigator.vibrate(500);
     }
   }
 

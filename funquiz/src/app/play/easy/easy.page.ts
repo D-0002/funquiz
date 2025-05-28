@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -11,10 +11,9 @@ import { AuthService } from '../../../services/auth.service';
 interface Question { word: string; definition: string; }
 const QUESTIONS_PER_GAME = 5;
 
-// Scoring constants for Easy level
 const EASY_BASE_POINTS_PER_QUESTION = 5;
-const EASY_PENALTY_PER_WRONG_ATTEMPT = 2; 
-const EASY_MIN_POINTS_IF_CORRECT = 1;    // Minimum they get if they eventually answer correctly
+const EASY_PENALTY_PER_WRONG_ATTEMPT = 2;
+const EASY_MIN_POINTS_IF_CORRECT = 1;
 
 @Component({
   selector: 'app-easy',
@@ -27,8 +26,7 @@ const EASY_MIN_POINTS_IF_CORRECT = 1;    // Minimum they get if they eventually 
     CommonModule, FormsModule
   ]
 })
-export class EasyPage implements OnInit {
-  // questions pool
+export class EasyPage implements OnInit, OnDestroy {
   questions: Question[] = [
     { word: 'RHYTHM', definition: 'The beat or musical quality of a poem.' },
     { word: 'STANZA', definition: 'A group of lines in a poem.' },
@@ -54,13 +52,36 @@ export class EasyPage implements OnInit {
   showResults: boolean = false;
   hasNextLevel: boolean = true;
 
-  currentQuestionAttempts: number = 0; 
+  currentQuestionAttempts: number = 0;
+  private vibrationEnabled: boolean = true;
+  private sfxEnabled: boolean = false;
+  private clickSoundPlayer: HTMLAudioElement | null = null;
 
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
+    this.loadVibrationSetting();
+    this.loadSfxSetting();
     this.prepareNewGameSet();
     this.initializeGame();
+  }
+
+  ngOnDestroy() {
+    if (this.clickSoundPlayer) {
+      this.clickSoundPlayer.pause();
+      this.clickSoundPlayer.src = '';
+      this.clickSoundPlayer = null;
+    }
+  }
+
+  loadVibrationSetting() {
+    const vibrationSetting = localStorage.getItem('vibration');
+    this.vibrationEnabled = vibrationSetting !== null ? JSON.parse(vibrationSetting) : true;
+  }
+
+  loadSfxSetting() {
+    const sfxSetting = localStorage.getItem('sfx');
+    this.sfxEnabled = sfxSetting !== null ? JSON.parse(sfxSetting) : false;
   }
 
   prepareNewGameSet() {
@@ -83,7 +104,7 @@ export class EasyPage implements OnInit {
     this.usedLetters = new Set<string>();
     this.feedback = '';
     this.feedbackIsError = false;
-    this.currentQuestionAttempts = 0; 
+    this.currentQuestionAttempts = 0;
   }
 
   shuffleLetters() {
@@ -110,6 +131,17 @@ export class EasyPage implements OnInit {
     if (firstEmptyIndex !== -1) {
       this.userAnswer[firstEmptyIndex] = letter;
       this.usedLetters.add(letter);
+      this.playClickSound(); 
+    }
+  }
+
+  playClickSound() {
+    if (this.sfxEnabled) {
+      if (!this.clickSoundPlayer) {
+        this.clickSoundPlayer = new Audio('../../../assets/click.mp3');
+      }
+      this.clickSoundPlayer.currentTime = 0;
+      this.clickSoundPlayer.play().catch(error => console.warn("Click sound play failed:", error));
     }
   }
 
@@ -146,18 +178,24 @@ export class EasyPage implements OnInit {
       this.feedbackIsError = false;
       setTimeout(() => this.nextQuestion(), 2000);
     } else {
-
-      this.currentQuestionAttempts++; 
+      this.currentQuestionAttempts++;
       this.feedback = `Incorrect. Try again!`;
       this.feedbackIsError = true;
-      setTimeout(() => this.resetAttemptUI(), 1500); 
+      this.triggerVibration();
+      setTimeout(() => this.resetAttemptUI(), 1500);
+    }
+  }
+
+  triggerVibration() {
+    if (this.vibrationEnabled && navigator.vibrate) {
+      navigator.vibrate(500);
     }
   }
 
   nextQuestion() {
     this.currentQuestionIndex++;
     if (this.currentQuestionIndex < this.activeGameQuestions.length) {
-      this.initializeGame(); 
+      this.initializeGame();
     } else {
       this.recordLevelCompletion();
       this.showResults = true;

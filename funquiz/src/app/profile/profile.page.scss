@@ -7,19 +7,18 @@
   overflow: hidden;
   font-family: 'Orbitron', sans-serif;
   color: #fff;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%),
-                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 70%);
-    animation: rotateBG 40s linear infinite;
-    z-index: 0;
-  }
+}
+.account-page::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%),
+              radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 70%);
+  animation: rotateBG 40s linear infinite;
+  z-index: 0;
 }
 
 @keyframes rotateBG {
@@ -53,11 +52,10 @@ ion-back-button {
   position: relative;
   z-index: 1;
   max-width: 400px;
-  margin: 40px auto 0; /* Increased top margin to match account page */
+  margin: 40px auto 0;
   text-align: center;
 }
 
-/* Avatar container matching account page style */
 .avatar-container {
   position: relative;
   display: inline-block;
@@ -88,36 +86,35 @@ ion-back-button {
   border-radius: 50%;
 }
 
-/* Edit icon overlay */
 .edit-overlay {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 30px;
-  height: 30px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 28px;
+  height: 28px;
+  background: rgba(40, 58, 130, 0.9);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid rgba(255, 211, 42, 0.6);
-  backdrop-filter: blur(8px);
-  transition: all 0.2s ease;
+  border: 2px solid #ffd32a;
+  backdrop-filter: blur(4px);
+  transition: all 0.25s ease;
+  box-shadow: 0 0 8px rgba(255, 211, 42, 0.6);
 }
 
 .edit-overlay ion-icon {
-  font-size: 16px;
+  font-size: 20px;
   color: #ffd32a;
 }
 
 .account-icon:hover .edit-overlay {
-  transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.15);
-  border-color: #ffd32a;
-  box-shadow: 0 2px 8px rgba(255, 211, 42, 0.3);
+  transform: scale(1.15);
+  background: rgba(50, 70, 150, 0.95);
+  border-color: #fff;
+  box-shadow: 0 0 12px rgba(255, 211, 42, 0.8), 0 0 5px #fff;
 }
 
-/* Ripple effect matching account page */
 .ripple-effect {
   position: absolute;
   top: 50%;

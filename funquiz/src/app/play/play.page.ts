@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -38,7 +38,7 @@ interface Level {
     FormsModule
   ]
 })
-export class PlayPage implements OnInit {
+export class PlayPage implements OnInit, OnDestroy {
 
   levels: Level[] = [
     {
@@ -75,26 +75,82 @@ export class PlayPage implements OnInit {
     }
   ];
 
+  private audioPlayer: HTMLAudioElement | null = null;
+  private bgmEnabled: boolean = true;
+  private navigatingToLevel: boolean = false;
+  private gameLevelRoutes: string[] = ['/easy', '/medium', '/hard', '/extreme'];
+
   constructor(private router: Router) { }
 
   ngOnInit() {
     this.checkLevelUnlocks();
   }
 
+  ionViewWillEnter() {
+    this.loadBgmSetting();
+    this.playBackgroundMusic();
+  }
+
+  ionViewWillLeave() {
+    if (this.navigatingToLevel) {
+      this.navigatingToLevel = false;
+    } else {
+      this.pauseBackgroundMusic();
+    }
+  }
+
+  ngOnDestroy() {
+    this.pauseBackgroundMusic();
+    if (this.audioPlayer) {
+      this.audioPlayer.src = '';
+      this.audioPlayer = null;
+    }
+  }
+
+  loadBgmSetting() {
+    const bgmSetting = localStorage.getItem('bgm');
+    this.bgmEnabled = bgmSetting !== null ? JSON.parse(bgmSetting) : true;
+  }
+
+  playBackgroundMusic() {
+    if (this.bgmEnabled) {
+      if (!this.audioPlayer) {
+        this.audioPlayer = new Audio('../../assets/bg-music.mp3'); // Your specified path
+        this.audioPlayer.loop = true;
+      }
+
+      if (this.audioPlayer.paused) {
+        this.audioPlayer.play().catch(error => {
+          console.warn('Background music autoplay was prevented:', error);
+          // This warning is expected on initial page load/refresh without user interaction.
+          // Music will play after the first user interaction.
+        });
+      }
+    } else {
+      this.pauseBackgroundMusic();
+    }
+  }
+
+  pauseBackgroundMusic() {
+    if (this.audioPlayer && !this.audioPlayer.paused) {
+      this.audioPlayer.pause();
+    }
+  }
+
   checkLevelUnlocks() {
     const easyCompleted = this.checkLevelCompletion('easy');
     if (easyCompleted) {
-      this.levels[1].locked = false; 
+      this.levels[1].locked = false;
     }
 
     const mediumCompleted = this.checkLevelCompletion('medium');
     if (mediumCompleted) {
-      this.levels[2].locked = false; 
+      this.levels[2].locked = false;
     }
 
     const hardCompleted = this.checkLevelCompletion('hard');
     if (hardCompleted) {
-      this.levels[3].locked = false; 
+      this.levels[3].locked = false;
     }
   }
 
@@ -109,12 +165,15 @@ export class PlayPage implements OnInit {
 
   selectLevel(index: number) {
     const selectedLevel = this.levels[index];
-        
+
     this.levels.forEach(level => level.selected = false);
-        
+
     selectedLevel.selected = true;
-        
+
     if (!selectedLevel.locked) {
+      if (this.gameLevelRoutes.includes(selectedLevel.route)) {
+        this.navigatingToLevel = true;
+      }
       this.router.navigate([selectedLevel.route]);
     }
   }

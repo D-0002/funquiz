@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -13,7 +13,7 @@ const QUESTIONS_PER_GAME = 5;
 
 const EXTREME_BASE_POINTS_PER_QUESTION = 20;
 const EXTREME_PENALTY_PER_WRONG_ATTEMPT = 5;
-const EXTREME_MIN_POINTS_IF_CORRECT = 4;     // Minimum points for a correct answer
+const EXTREME_MIN_POINTS_IF_CORRECT = 4;
 
 @Component({
   selector: 'app-extreme',
@@ -26,7 +26,7 @@ const EXTREME_MIN_POINTS_IF_CORRECT = 4;     // Minimum points for a correct ans
     CommonModule, FormsModule
   ]
 })
-export class ExtremePage implements OnInit {
+export class ExtremePage implements OnInit, OnDestroy {
   questions: Question[] = [
     { word: 'SHAPEPOEM', definition: 'A poem written in the shape of the subject.' },
     { word: 'EPIC', definition: 'A long narrative poem about heroic deeds.' },
@@ -50,15 +50,39 @@ export class ExtremePage implements OnInit {
   feedbackIsError: boolean = false;
   score: number = 0;
   showResults: boolean = false;
-  hasNextLevel: boolean = false; 
+  hasNextLevel: boolean = false;
 
-  currentQuestionAttempts: number = 0; 
+  currentQuestionAttempts: number = 0;
+
+  private vibrationEnabled: boolean = true;
+  private sfxEnabled: boolean = false;
+  private clickSoundPlayer: HTMLAudioElement | null = null;
 
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
+    this.loadVibrationSetting();
+    this.loadSfxSetting();
     this.prepareNewGameSet();
     this.initializeGame();
+  }
+
+  ngOnDestroy() {
+    if (this.clickSoundPlayer) {
+      this.clickSoundPlayer.pause();
+      this.clickSoundPlayer.src = '';
+      this.clickSoundPlayer = null;
+    }
+  }
+
+  loadVibrationSetting() {
+    const vibrationSetting = localStorage.getItem('vibration');
+    this.vibrationEnabled = vibrationSetting !== null ? JSON.parse(vibrationSetting) : true;
+  }
+
+  loadSfxSetting() {
+    const sfxSetting = localStorage.getItem('sfx');
+    this.sfxEnabled = sfxSetting !== null ? JSON.parse(sfxSetting) : false;
   }
 
   prepareNewGameSet() {
@@ -110,9 +134,20 @@ export class ExtremePage implements OnInit {
     if (firstEmptyIndex !== -1) {
       this.userAnswer[firstEmptyIndex] = letter;
       this.usedLetters.add(letter);
+      this.playClickSound();
     }
     this.feedback = '';
     this.feedbackIsError = false;
+  }
+
+  playClickSound() {
+    if (this.sfxEnabled) {
+      if (!this.clickSoundPlayer) {
+        this.clickSoundPlayer = new Audio('../../../assets/click.mp3');
+      }
+      this.clickSoundPlayer.currentTime = 0;
+      this.clickSoundPlayer.play().catch(error => console.warn("Click sound play failed:", error));
+    }
   }
 
   backspace() {
@@ -148,11 +183,18 @@ export class ExtremePage implements OnInit {
       setTimeout(() => this.nextQuestion(), 2000);
     } else {
       this.currentQuestionAttempts++;
-      this.feedback = `Incorrect. Try again!`; 
+      this.feedback = `Incorrect. Try again!`;
       this.feedbackIsError = true;
+      this.triggerVibration();
       setTimeout(() => {
         this.resetAttemptUI();
       }, 1500);
+    }
+  }
+
+  triggerVibration() {
+    if (this.vibrationEnabled && navigator.vibrate) {
+      navigator.vibrate(500);
     }
   }
 

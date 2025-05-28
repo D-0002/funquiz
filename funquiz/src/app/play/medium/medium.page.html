@@ -1,13 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/easy"></ion-back-button> <!-- Changed from /play to /easy -->
+      <ion-back-button defaultHref="/easy"></ion-back-button>
     </ion-buttons>
     <ion-title>Medium Quiz</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<!-- Rest of medium.page.html remains the same as you provided -->
 <ion-content [fullscreen]="true" class="quiz-page">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -70,7 +69,7 @@
       <ion-content class="ion-padding">
         <div class="results-container">
           <h2>Level Complete!</h2>
-          <p>Your Score: {{ score }} / {{ activeGameQuestions.length }}</p>
+          <p>Your Score: {{ score }} / {{ maximumPossibleScore }}</p>
 
           <ion-button expand="block" color="primary" (click)="goToNextLevel()" *ngIf="hasNextLevel">
             Next Level: Hard

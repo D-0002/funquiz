@@ -1,14 +1,13 @@
 import { type Context } from "hono";
 import { PrismaClient } from '@prisma/client';
 import crypto from 'crypto';
-import fs from 'fs/promises'; // For file system operations
-import path from 'path';    // For path manipulation
-import { nanoid } from 'nanoid'; // For unique filenames: npm install nanoid
+import fs from 'fs/promises'; 
+import path from 'path';
+import { nanoid } from 'nanoid';
 
 const prisma = new PrismaClient();
 const UPLOADS_DIR = path.resolve(process.cwd(), 'uploads');
 
-// Ensure uploads directory exists (run once at server startup ideally, but here for self-containment)
 (async () => {
     try {
         await fs.mkdir(UPLOADS_DIR, { recursive: true });
@@ -40,14 +39,14 @@ export async function signupData(c: Context) {
     }
 
     const passwordHash = hashPassword(password);
-    const defaultProfilePicture = null; // Or your default picture URL if hosted elsewhere
+    const defaultProfilePicture = null;
 
     const newUser = await prisma.users.create({
       data: {
         username,
         email,
         password_hash: passwordHash,
-        profile_picture_url: defaultProfilePicture, // Set initial value
+        profile_picture_url: defaultProfilePicture,
       },
       select: {
         id: true,
@@ -55,7 +54,7 @@ export async function signupData(c: Context) {
         email: true,
         created_at: true,
         total_score: true,
-        profile_picture_url: true, // Include profile_picture_url
+        profile_picture_url: true,
       },
     });
 
@@ -90,7 +89,7 @@ export async function loginData(c: Context) {
         email: true,
         created_at: true,
         total_score: true,
-        profile_picture_url: true, // Include profile_picture_url
+        profile_picture_url: true,
       },
     });
 
@@ -147,7 +146,7 @@ export async function getLeaderboardData(c: Context) {
   }
 }
 
-// Get User Data (including profile picture)
+
 export async function getUserData(c: Context) {
   try {
     const userId = parseInt(c.req.param('userId'), 10);

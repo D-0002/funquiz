@@ -69,7 +69,7 @@
       <ion-content class="ion-padding">
         <div class="results-container">
           <h2>Level Complete!</h2>
-          <p>Your Score: {{ score }} / {{ activeGameQuestions.length }}</p>
+          <p>Your Score: {{ score }} / {{ maximumPossibleScore }}</p>
 
           <ion-button expand="block" color="primary" (click)="goToNextLevel()" *ngIf="hasNextLevel">
             Next Level: Medium

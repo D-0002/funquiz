@@ -51,6 +51,7 @@ export class MediumPage implements OnInit, OnDestroy {
   score: number = 0;
   showResults: boolean = false;
   hasNextLevel: boolean = true;
+  maximumPossibleScore: number = QUESTIONS_PER_GAME * MEDIUM_BASE_POINTS_PER_QUESTION;
 
   currentQuestionAttempts: number = 0;
 

@@ -1,16 +1,16 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/hard"></ion-back-button> <!-- Changed from /play to /hard -->
+      <ion-back-button defaultHref="/hard"></ion-back-button>
     </ion-buttons>
-    <ion-title>Fun Quiz</ion-title> <!-- Title can be "Extreme Quiz" or stay "Fun Quiz" -->
+    <ion-title>Extreme Quiz</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="quiz-page">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Extreme Quiz</ion-title> <!-- Title can be "Extreme Quiz" -->
+      <ion-title size="large">Extreme Quiz</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -68,10 +68,9 @@
       </ion-header>
       <ion-content class="ion-padding">
         <div class="results-container">
-          <h2>Extreme Level Complete!</h2> <!-- Or "Congratulations! All Levels Cleared!" -->
-          <p>Your Score: {{ score }} / {{ activeGameQuestions.length }}</p>
-          
-          <!-- No "Next Level" button as this is the last level -->
+          <h2>Extreme Level Complete!</h2>
+          <p>Your Score: {{ score }} / {{ maximumPossibleScore }}</p>
+
           <ion-button expand="block" fill="outline" (click)="restart()">
             Play Again
           </ion-button>

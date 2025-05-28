@@ -51,6 +51,7 @@ export class EasyPage implements OnInit, OnDestroy {
   score: number = 0;
   showResults: boolean = false;
   hasNextLevel: boolean = true;
+  maximumPossibleScore: number = QUESTIONS_PER_GAME * EASY_BASE_POINTS_PER_QUESTION;
 
   currentQuestionAttempts: number = 0;
   private vibrationEnabled: boolean = true;
@@ -131,7 +132,7 @@ export class EasyPage implements OnInit, OnDestroy {
     if (firstEmptyIndex !== -1) {
       this.userAnswer[firstEmptyIndex] = letter;
       this.usedLetters.add(letter);
-      this.playClickSound(); 
+      this.playClickSound();
     }
   }
 

@@ -9,27 +9,41 @@
 
 <ion-content [fullscreen]="true" class="ion-padding account-page">
   <div class="profile-container">
-    <div class="profile-avatar">
-      <ion-icon name="person-circle-outline" size="large"></ion-icon>
+    <div class="avatar-container">
+      <!-- Avatar is clickable to change picture -->
+      <ion-avatar class="account-icon" (click)="triggerFileUpload()">
+        <img [src]="userProfilePictureUrl" alt="Profile Picture" />
+      </ion-avatar>
+
+      <!-- Hidden file input element -->
+      <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept="image/png, image/jpeg, image/gif" />
+
+      <!-- Optional: A visible button to change picture -->
+      <ion-button fill="clear" (click)="triggerFileUpload()" class="edit-picture-button">
+        <ion-icon name="camera-outline" slot="start"></ion-icon>
+        Change Picture
+      </ion-button>
     </div>
-    
+
     <ion-item lines="inset">
       <ion-label position="floating">Name</ion-label>
-      <ion-input [(ngModel)]="userName" placeholder="Enter your name"></ion-input>
+      <ion-input [(ngModel)]="userName" placeholder="Enter your name" readonly></ion-input>
     </ion-item>
-    
+
     <ion-item lines="inset">
       <ion-label>Sex</ion-label>
       <ion-select [(ngModel)]="userSex" interface="popover">
         <ion-select-option value="Male">Male</ion-select-option>
         <ion-select-option value="Female">Female</ion-select-option>
+        <ion-select-option value="Other">Other</ion-select-option>
+        <ion-select-option value="PreferNotToSay">Prefer Not To Say</ion-select-option>
       </ion-select>
     </ion-item>
-    
+
     <ion-button expand="block" color="tertiary" class="custom-button" (click)="goToLeaderboard()">
       View Leaderboard
     </ion-button>
-    
+
     <ion-button expand="block" color="danger" class="custom-button" (click)="logOut()">
       Log Out
     </ion-button>

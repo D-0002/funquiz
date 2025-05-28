@@ -53,16 +53,55 @@ ion-back-button {
   position: relative;
   z-index: 1;
   max-width: 400px;
-  margin: 0 auto;
+  margin: 20px auto 0; /* Adjusted margin for better spacing, especially at the top */
+  text-align: center; /* To center the inline-block avatar-container */
 }
 
-.profile-avatar {
-  font-size: 100px;
-  color: rgba(255, 255, 255, 0.6);
-  text-align: center;
-  margin-bottom: 24px;
-  z-index: 1;
+/* Removed old .profile-avatar styles */
+
+/* Added styles from login page for the avatar */
+.avatar-container {
+  position: relative;
+  display: inline-block; /* Allows text-align: center on parent to work */
+  margin-bottom: 24px; /* Consistent with original profile-avatar margin */
 }
+
+.account-icon {
+  width: 100px;
+  height: 100px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* ion-avatar will handle the image display, but we ensure img styling */
+}
+
+.account-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the avatar space, might crop */
+  border-radius: 50%; /* Keep it rounded */
+}
+
+.ripple-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px; /* Adjust if needed based on account-icon size */
+  height: 140px; /* Adjust if needed based on account-icon size */
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 2s infinite ease-out;
+  z-index: -1; /* Ensure ripple is behind the avatar image */
+}
+
+@keyframes ripple {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+}
+/* End of added avatar styles */
 
 ion-item {
   --background: rgba(255, 255, 255, 0.05);
@@ -74,6 +113,7 @@ ion-item {
   margin-bottom: 16px;
   backdrop-filter: blur(8px);
   color: #fff;
+  text-align: left; /* Reset text-align for items if parent is centered */
 }
 
 ion-label {

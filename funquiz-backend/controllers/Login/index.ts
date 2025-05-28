@@ -4,6 +4,8 @@ import {
     loginData,
     updateUserScoreData,
     getLeaderboardData,
+    getUserData,
+    updateProfilePictureData,
 } from "../../data/Login.js"
 
 
@@ -21,4 +23,12 @@ export function updateUserScoreController(c: Context) {
 
 export function getLeaderboardController(c: Context) {
     return getLeaderboardData(c);
+  }
+
+export function getUserController(c: Context) {
+    return getUserData(c);
+  }
+
+export function updateProfilePictureController(c: Context) {
+    return updateProfilePictureData(c);
   }

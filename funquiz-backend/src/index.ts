@@ -10,7 +10,6 @@ import fs from 'fs/promises';
 const app = new Hono();
 const prisma = new PrismaClient();
 
-// Ensure uploads directory exists
 const UPLOADS_DIR = path.resolve(process.cwd(), 'uploads');
 (async () => {
     try {
@@ -21,24 +20,15 @@ const UPLOADS_DIR = path.resolve(process.cwd(), 'uploads');
     }
 })();
 
-// Add CORS middleware to allow requests from the frontend
 app.use('/api/*', cors({
   origin: '*', 
 }));
 
-// Serve static files from uploads directory
-// Option 1: Simple serveStatic (uncomment if you prefer this)
-// app.use('/uploads/*', serveStatic({
-//   root: './uploads'
-// }));
-
-// Option 2: Custom file serving route with full control (recommended)
 app.get('/uploads/:filename', async (c) => {
   try {
     const filename = c.req.param('filename');
     const filePath = path.join(process.cwd(), 'uploads', filename);
     
-    // Security check to prevent directory traversal
     const normalizedPath = path.normalize(filePath);
     const uploadsDir = path.normalize(path.join(process.cwd(), 'uploads'));
     
@@ -46,17 +36,14 @@ app.get('/uploads/:filename', async (c) => {
       return c.text('Access denied', 403);
     }
     
-    // Check if file exists
     try {
       await fs.access(filePath);
     } catch {
       return c.text('File not found', 404);
     }
     
-    // Read and serve the file
     const fileBuffer = await fs.readFile(filePath);
     
-    // Set appropriate content type based on file extension
     const ext = path.extname(filename).toLowerCase();
     let contentType = 'application/octet-stream';
     
@@ -89,7 +76,6 @@ app.get('/uploads/:filename', async (c) => {
   }
 });
 
-// Check database connection
 prisma.$connect()
   .then(() => {
     console.log('Connected to the database successfully!');
@@ -98,12 +84,10 @@ prisma.$connect()
     console.error('Failed to connect to the database:', error);
   });
 
-/* Routes */
 routes.forEach((route) => {
   app.route("/", route);
 });
 
-// Start the server on port 3000
 serve({
   fetch: app.fetch,
   port: 3000

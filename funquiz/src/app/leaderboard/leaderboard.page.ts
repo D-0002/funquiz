@@ -37,7 +37,6 @@ import { AuthService, LeaderboardPlayer } from '../../services/auth.service';
     IonRefresher,
     IonRefresherContent,
     IonButton,
-    // IonIcon,
     CommonModule,
     FormsModule
   ]
@@ -80,8 +79,4 @@ export class LeaderboardPage implements OnInit {
   handleRefresh(event: any) {
     this.loadLeaderboard(event);
   }
-
-  // goToMainMenu() { // This function might not be needed if ion-back-button handles navigation
-  //   this.router.navigate(['/welcome']); // Or '/play' or your main menu page
-  // }
 }

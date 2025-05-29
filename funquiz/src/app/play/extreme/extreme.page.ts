@@ -97,7 +97,7 @@ export class ExtremePage implements OnInit, OnDestroy {
         this.prepareNewGameSet();
         if (this.activeGameQuestions.length === 0) {
           console.error("Failed to initialize game: No questions available for Extreme level.");
-          this.currentQuestion = undefined!; // Explicitly set to undefined
+          this.currentQuestion = undefined!;
           return;
         }
     }

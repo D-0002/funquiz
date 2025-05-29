@@ -97,7 +97,7 @@ export class HardPage implements OnInit, OnDestroy {
         this.prepareNewGameSet();
         if (this.activeGameQuestions.length === 0) {
           console.error("Failed to initialize game: No questions available for Hard level.");
-          this.currentQuestion = undefined!; // Explicitly set to undefined if no questions
+          this.currentQuestion = undefined!;
           return;
         }
     }
@@ -111,7 +111,7 @@ export class HardPage implements OnInit, OnDestroy {
   }
 
   shuffleLetters() {
-    if (!this.currentQuestion) return; // Guard against undefined currentQuestion
+    if (!this.currentQuestion) return;
     const wordLetters = this.currentQuestion.word.toUpperCase().split('');
     const requiredLetters = new Set<string>(wordLetters);
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -128,13 +128,13 @@ export class HardPage implements OnInit, OnDestroy {
   }
 
   resetAttemptUI() {
-    if (!this.currentQuestion) return; // Guard
+    if (!this.currentQuestion) return;
     this.userAnswer = Array(this.currentQuestion.word.length).fill('');
     this.usedLetters = new Set<string>();
   }
 
   selectLetter(letter: string) {
-    if (!this.currentQuestion) return; // Guard
+    if (!this.currentQuestion) return;
     const firstEmptyIndex = this.userAnswer.indexOf('');
     if (firstEmptyIndex !== -1) {
       this.userAnswer[firstEmptyIndex] = letter;
@@ -175,7 +175,7 @@ export class HardPage implements OnInit, OnDestroy {
   }
 
   submit() {
-    if (!this.canSubmit() || !this.currentQuestion) return; // Guard
+    if (!this.canSubmit() || !this.currentQuestion) return;
     const submittedAnswer = this.userAnswer.join('');
 
     if (submittedAnswer === this.currentQuestion.word) {

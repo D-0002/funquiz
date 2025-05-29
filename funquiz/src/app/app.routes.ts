@@ -1,7 +1,5 @@
-// src/app/app.routes.ts
-
 import { Routes } from '@angular/router';
-import { authGuard } from '../services/auth.guard'; // Ensure this path is correct
+import { authGuard } from '../services/auth.guard';
 
 export const routes: Routes = [
   {
@@ -18,7 +16,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/account/account.page').then( m => m.AccountPage)
   },
   {
-    path: 'account-details', // This is your LOGIN FORM page
+    path: 'account-details',
     loadComponent: () => import('./pages/account-details/account-details.page').then( m => m.AccountDetailsPage),
   },
   {
@@ -40,8 +38,7 @@ export const routes: Routes = [
   },
   {
     path: 'play',
-    loadComponent: () => import('./play/play.page').then( m => m.PlayPage), // This is the level selection page
-    canActivate: [authGuard]
+    loadComponent: () => import('./play/play.page').then( m => m.PlayPage),
   },
   {
     path: 'settings',
@@ -51,7 +48,6 @@ export const routes: Routes = [
   {
     path: 'leaderboard',
     loadComponent: () => import('./leaderboard/leaderboard.page').then( m => m.LeaderboardPage),
-    // canActivate: [authGuard] // Uncomment if leaderboard requires login
   },
   {
     path: 'profile',
@@ -65,9 +61,7 @@ export const routes: Routes = [
   },
   {
     path: 'medium',
-    // Ensure the path './play/medium/medium.page' is correct relative to app.routes.ts
-    // And that medium.page.ts exports MediumPage
-    loadComponent: () => import('./play/medium/medium.page').then( m => m.MediumPage), // CORRECTED
+    loadComponent: () => import('./play/medium/medium.page').then( m => m.MediumPage),
     canActivate: [authGuard]
   },
   {

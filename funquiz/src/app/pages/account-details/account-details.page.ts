@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { AuthService } from '../../../services/auth.service'; // Adjust path as needed
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-account-details',

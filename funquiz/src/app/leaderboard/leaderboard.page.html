@@ -34,11 +34,10 @@
   </div>
 
   <ion-list *ngIf="!isLoading && !errorMessage && rankings.length > 0">
-    <!-- Ensure property names match what's in your 'rankings' array after mapping -->
     <ion-item *ngFor="let player of rankings; let i = index" class="animate-item" [style.--item-index]="i+1">
       <ion-label>
-        <h2>{{ player.rank }}. {{ player.username }}</h2> <!-- Use player.username -->
-        <p>Score: <span class="highlight">{{ player.total_score }}</span></p> <!-- Use player.total_score -->
+        <h2>{{ player.rank }}. {{ player.username }}</h2>
+        <p>Score: <span class="highlight">{{ player.total_score }}</span></p>
       </ion-label>
     </ion-item>
   </ion-list>

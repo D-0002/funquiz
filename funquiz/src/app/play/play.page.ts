@@ -115,15 +115,13 @@ export class PlayPage implements OnInit, OnDestroy {
   playBackgroundMusic() {
     if (this.bgmEnabled) {
       if (!this.audioPlayer) {
-        this.audioPlayer = new Audio('../../assets/bg-music.mp3'); // Your specified path
+        this.audioPlayer = new Audio('../../assets/bg-music.mp3');
         this.audioPlayer.loop = true;
       }
 
       if (this.audioPlayer.paused) {
         this.audioPlayer.play().catch(error => {
           console.warn('Background music autoplay was prevented:', error);
-          // This warning is expected on initial page load/refresh without user interaction.
-          // Music will play after the first user interaction.
         });
       }
     } else {

@@ -42,8 +42,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       this.originalUserName = user.username;
       this.editableUserName = user.username;
       this.userProfilePictureUrl = user.profile_picture_url || this.defaultProfilePicture;
-      // Remove this line since sex doesn't exist on User
-      // this.userSex = user.sex || 'PreferNotToSay'; 
     } else {
       this.editableUserName = '';
       this.originalUserName = '';

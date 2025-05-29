@@ -16,15 +16,20 @@
           <ion-icon name="pencil-outline"></ion-icon>
         </div>
       </ion-avatar>
-      
       <div class="ripple-effect"></div>
-
       <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept="image/png, image/jpeg, image/gif" />
     </div>
 
     <ion-item lines="inset">
       <ion-label position="floating">Name</ion-label>
-      <ion-input [(ngModel)]="userName" placeholder="Enter your name" readonly></ion-input>
+      <ion-input 
+        [(ngModel)]="editableUserName" 
+        (click)="startEditUsername()"
+        (ionBlur)="confirmUsernameChange()"
+        (keyup.enter)="confirmUsernameChange()"
+        (keyup.escape)="cancelEditUsername()"
+        [readonly]="!isEditingUsername">
+      </ion-input>
     </ion-item>
 
     <ion-item lines="inset">

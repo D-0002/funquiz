@@ -6,6 +6,7 @@
     getLeaderboardController,
     updateProfilePictureController,
     getUserController,
+    updateUserProfileController,
  } from './index.js';
  
  const router = new Hono()
@@ -14,7 +15,8 @@
      .post('/api/update-score', updateUserScoreController)
      .get('/api/leaderboard', getLeaderboardController)
      .post('/api/user/profile-picture', updateProfilePictureController)
-     .get('/api/user/:userId', getUserController); 
+     .get('/api/user/:userId', getUserController)
+     .put('/api/user/profile/:userId', updateUserProfileController); 
 
 
  export default router 

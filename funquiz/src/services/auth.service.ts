@@ -1,16 +1,15 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
-import { map, catchError, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { map, catchError, tap } from 'rxjs/operators';
 
 export interface User {
   id: number;
   username: string;
   email: string;
-  created_at: string;
+  created_at: string; 
   total_score: number;
-  profile_picture_url?: string | null; // Added
+  profile_picture_url?: string | null;
 }
 
 export interface AuthResponse {
@@ -20,7 +19,7 @@ export interface AuthResponse {
 
 export interface UpdateScoreResponse {
   message: string;
-  user: {
+  user: { 
     id: number;
     username: string;
     total_score: number;
@@ -32,7 +31,7 @@ export interface LeaderboardPlayer {
   username: string;
   total_score: number;
   rank: number;
-  profile_picture_url?: string | null; // Potentially show avatars in leaderboard
+  profile_picture_url?: string | null;
 }
 
 export interface LeaderboardResponse {
@@ -44,11 +43,10 @@ export interface LeaderboardResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api'; // Ensure this matches your backend
+  private apiUrl = 'http://localhost:3000/api';
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private defaultProfilePicture = '../../../assets/icon-logo.jfif';
-
 
   constructor(private http: HttpClient) {
     const storedUser = sessionStorage.getItem('currentUser');
@@ -63,7 +61,6 @@ export class AuthService {
   }
 
   private storeUserAndNotify(user: User): User {
-    // Ensure profile_picture_url is handled, even if null from backend
     const userToStore = { ...user, profile_picture_url: user.profile_picture_url || null };
     sessionStorage.setItem('currentUser', JSON.stringify(userToStore));
     this.currentUserSubject.next(userToStore);
@@ -86,13 +83,6 @@ export class AuthService {
   signup(username: string, email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, { username, email, password })
       .pipe(
-        map(response => {
-          // Optionally log in the user directly after signup
-          // if (response.user) {
-          //   this.storeUserAndNotify(response.user);
-          // }
-          return response;
-        }),
         catchError(this.handleError)
       );
   }
@@ -103,6 +93,7 @@ export class AuthService {
     localStorage.removeItem('easyScore');
     localStorage.removeItem('mediumScore');
     localStorage.removeItem('hardScore');
+    localStorage.removeItem('extremeScore');
   }
 
   isLoggedIn(): boolean {
@@ -111,7 +102,7 @@ export class AuthService {
 
   updateScore(scoreToAdd: number): Observable<UpdateScoreResponse> {
     const currentUser = this.currentUserValue;
-    if (!currentUser || !currentUser.id) {
+    if (!currentUser || currentUser.id === undefined) { 
       return throwError(() => new Error('User not logged in or user ID not available.'));
     }
     const userId = currentUser.id;
@@ -120,8 +111,8 @@ export class AuthService {
         map(response => {
           if (response.user && this.currentUserSubject.value) {
             const updatedLocalUser: User = {
-              ...this.currentUserSubject.value,
-              total_score: response.user.total_score
+              ...this.currentUserSubject.value, 
+              total_score: response.user.total_score 
             };
             this.storeUserAndNotify(updatedLocalUser);
           }
@@ -139,17 +130,16 @@ export class AuthService {
       );
   }
 
-  // New: Update Profile Picture
   updateProfilePicture(userId: number, file: File): Observable<User> {
     const formData = new FormData();
     formData.append('profilePicture', file, file.name);
-    formData.append('userId', userId.toString());
+    formData.append('userId', userId.toString()); 
 
     return this.http.post<{ message: string, user: User }>(`${this.apiUrl}/user/profile-picture`, formData)
       .pipe(
         map(response => {
           if (response.user) {
-            this.storeUserAndNotify(response.user); // Update local user state
+            this.storeUserAndNotify(response.user); 
           }
           return response.user;
         }),
@@ -157,11 +147,28 @@ export class AuthService {
       );
   }
 
-  // New: Get User Details (useful for refreshing if needed)
+  // Fixed updateUserProfile method
+  updateUserProfile(userId: number, username: string): Observable<User> {
+    const payload = { username: username.trim() }; // Ensure clean payload
+    console.log('Sending update request:', payload); // Debug log
+    
+    return this.http.put<{ message: string, user: User }>(`${this.apiUrl}/user/profile/${userId}`, payload)
+      .pipe(
+        map(response => {
+          console.log('Update response received:', response); // Debug log
+          if (response.user) {
+            this.storeUserAndNotify(response.user);
+          }
+          return response.user;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getUserById(userId: number): Observable<User | null> {
     return this.http.get<{ user: User }>(`${this.apiUrl}/user/${userId}`).pipe(
       map(response => response.user || null),
-      tap(user => { // Optionally update current user if it's the same user
+      tap(user => {
         if (user && this.currentUserValue && this.currentUserValue.id === user.id) {
           this.storeUserAndNotify(user);
         }
@@ -176,14 +183,28 @@ export class AuthService {
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
+    console.error('HTTP Error details:', error); // Enhanced error logging
+    
     if (error.error instanceof ErrorEvent) {
-      // Client-side errors
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Server-side errors
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.error || error.message}`;
+      if (error.error && error.error.error) {
+        errorMessage = `${error.error.error}`;
+      } else if (error.error && error.error.details) {
+        // Handle validation errors from backend
+        const details = error.error.details;
+        if (details.username && details.username.length > 0) {
+          errorMessage = details.username[0];
+        } else {
+          errorMessage = 'Validation error occurred';
+        }
+      } else if (error.message) {
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      } else {
+        errorMessage = `Error Code: ${error.status}\nMessage: Server error`;
+      }
     }
-    console.error(errorMessage);
+    console.error('Processed error message:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

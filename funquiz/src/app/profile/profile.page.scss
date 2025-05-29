@@ -8,6 +8,7 @@
   font-family: 'Orbitron', sans-serif;
   color: #fff;
 }
+
 .account-page::before {
   content: '';
   position: absolute;
@@ -162,4 +163,70 @@ ion-select {
   font-weight: bold;
   font-family: 'Orbitron', sans-serif;
   --box-shadow: none;
+}
+
+.username-display-container,
+.username-edit-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.username-display-container > span,
+.username-edit-container > ion-input {
+  flex-grow: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+  color: #fff;
+}
+
+.username-display-container > ion-buttons,
+.username-edit-container > ion-buttons {
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.username-display-container ion-button,
+.username-edit-container ion-button {
+  --padding-start: 6px;
+  --padding-end: 6px;
+  min-width: auto;
+  transition: opacity 0.2s ease;
+}
+
+.username-display-container ion-button ion-icon,
+.username-edit-container ion-button ion-icon {
+  font-size: 20px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.username-display-container ion-button:hover,
+.username-edit-container ion-button:hover {
+  opacity: 0.85;
+}
+
+.username-display-container ion-button ion-icon[name="create-outline"] {
+  color: #ffd32a;
+  font-size: 22px;
+  text-shadow: 0 0 5px rgba(255, 211, 42, 0.7);
+}
+
+.username-display-container ion-button:hover ion-icon[name="create-outline"] {
+  transform: scale(1.1);
+}
+
+.username-edit-container ion-button ion-icon[name="checkmark-outline"] {
+  color: var(--ion-color-success, #2dd36f);
+}
+
+.username-edit-container ion-button ion-icon[name="close-outline"] {
+  color: var(--ion-color-danger, #eb445a);
+}
+
+.username-edit-container ion-button:hover ion-icon[name="checkmark-outline"],
+.username-edit-container ion-button:hover ion-icon[name="close-outline"] {
+  transform: scale(1.1);
 }
